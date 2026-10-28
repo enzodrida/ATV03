@@ -1,100 +1,132 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
-int main()
+void bubbleSort(int v[], int n)
+{
+    int i, j, aux;
+    // Percorre o vetor várias vezes
+    for (i = 0; i < n - 1; i++)
     {
-    int opcao, ordenacao, quantidade, numero
-    int etapa = 1;
-    do {
-        // Exibe o menu principal
-        printf("===== MENU =====\n");
-        printf("1 - Criar arquivo com dados numericos\n");
-        printf("2 - Escolha a Ordenação\n");
-        printf("3 - Emitir arquivo ordenado\n");
-        printf("4 - Sair\n");
-        printf("Escolha uma opcao: ");
-        scanf("%d", &opcao);
-        // Usa switch para tratar a escolha
-        switch (opcao) {
-            
-        case 1:
-        if (etapa == 1) {
-            printf("\nVoce escolheu: CRIAR ARQUIVO\n");
-            FILE *arquivo = fopen("dados.txt", "w");
-            if (arquivo == NULL) {
-                printf("Erro ao criar o arquivo!\n");
-                return 1;
+        for (j = 0; j < n - i - 1; j++)
+        {
+            // Se o elemento atual for maior que o próximo, troca
+            if (v[j] > v[j + 1])
+            {
+                aux = v[j];
+                v[j] = v[j + 1];
+                v[j + 1] = aux;
             }
-                printf("Quantos numeros deseja informar? ");
-                scanf("%d", &quantidade);
-                fprintf(arquivo, "Sequencia numerica:\n");
-            for (int i = 0; i < quantidade; i++) {
-                printf("Digite o %d numero: ", i + 1);
-                scanf("%d", &numero);
-                fprintf(arquivo, "%d ", numero);
-            }
-                fprintf(arquivo, "\n");
-                fclose(arquivo);
-                printf("\nArquivo criado e dados gravados com sucesso!\n");
-            return 0;
-            etapa = 2;
-        } else {
-            printf("Voce ja passou dessa etapa!\n");
         }
-        break;
-        
+    }
+}
+
+int main()
+{
+    int quantidade, numero;
+
+    system("cls");
+    printf("ETAPA 1 - CRIAÇÃO DE SEQUENCIA NUMÉRICA EM ORDEM ALEATÓRIA\n");
+    printf("Qual a quantidade de numeros que deseja informar?");
+    scanf("%d", &quantidade);
+
+    FILE *arquivo = fopen("dados.txt", "w");
+
+    for (int i = 0; i < quantidade; i++)
+    {
+        printf("Digite o %dº numero: ", i + 1);
+        scanf("%d", &numero);
+        fprintf(arquivo, "%d\n", numero);
+    }
+
+    fprintf(arquivo, "\n");
+    fclose(arquivo);
+
+    printf("\nArquivo criado e dados gravados com sucesso!\n");
+
+    printf("ETAPA 2 - LENDO SEQUENCIA DO ARQUIVO\n");
+    FILE *arquivo_leitura = fopen("dados.txt", "r");
+
+    int numeros[quantidade];
+    for (int i = 0; i < quantidade; i++)
+    {
+        fscanf(arquivo_leitura, "%d", &numeros[i]);
+        printf("Numero %d: %d\n", i + 1, numeros[i]);
+    }
+
+    fclose(arquivo_leitura);
+
+    int tipo_ordenacao;
+    do
+    {
+        // toda vez que eu entro num laço
+        // para escolher outra forma de ordenação
+        // os numeros serão os que o usuario escolheu.
+        int numeros_ordenados[quantidade];
+        for (int i = 0; i < quantidade; i++)
+        {
+            numeros_ordenados[i] = numeros[i];
+        }
+
+        printf("\nETAPA 3: ESCOLHA DE ORDENAÇÃO\n");
+        printf("===== MENU: ORDENAÇÃO =====\n\n");
+        printf("1 - Bubble Sort\n");
+        printf("2 - Insertion Sort\n");
+        printf("3 - Selection Sort\n");
+        printf("4 - Merge Sort\n");
+        printf("5 - Quick Sort\n");
+        printf("6 - Sair\n\n");
+
+        printf("Escolha uma opcao: ");
+        if (scanf("%d", &tipo_ordenacao) != 1)
+        {
+            system("cls");
+            printf("Entrada invalida. Tente novamente.\n");
+            while (getchar() != '\n')
+                ;
+            continue;
+        }
+
+        switch (tipo_ordenacao)
+        {
+        case 1:
+            printf("1 - Bubble Sort -----------------------------------\n");
+            bubbleSort(numeros_ordenados, quantidade);
+            break;
         case 2:
-        if (etapa == 2) {
-            printf("\nVoce escolheu: ORDENAÇÃO\n");
-            printf("===== MENU: ORDENAÇÃO =====\n");
-            printf("1 - Bubble Sort\n");
-            printf("2 - Insertion Sort\n");
-            printf("3 - Selection Sort\n");
-            printf("4 - Merge Sort\n");
-            printf("5 - Quick Sort\n");
-            printf("Escolha uma opcao: ");
-            scanf("%d", &ordenacao);
-            switch(ordenacao) {
-                case 1:
-                break;
-                
-                case 2:
-                break;
-                
-                case 3:
-                break;
-                
-                case 4:
-                break;
-                
-                case 5:
-                break;
-            } etapa = 3;}
-        else {
-            printf("Execute a primeira opcao antes!\n");
-            }
-        break;
-            
-        case 3:
-        if (etapa == 3) {
-            printf("\nVoce escolheu: EMITIR ARQUIVO ORDENADO\n");
-            etapa = 4;}
-        else {
-            printf("Execute as opcoes anteriores primeiro!\n");}
-        break;
-        
-        case 4:
-            if (etapa == 4) {
-                    printf("Saindo do programa...\n");
-            } else {
-                    printf("Complete as tres etapas antes de sair!\n");
-                opcao = 0;
-            }
+            printf("2 - Insertion Sort ----------------------------------\n");
+
             break;
 
-            default:
-            printf("Opcao invalida!\n");
+        case 3:
+            printf("3 - Selection Sort ----------------------------------\n");
+
+            break;
+
+        case 4:
+            printf("4 - Merge Sort ------------------------------------\n");
+
+            break;
+
+        case 5:
+            printf("5 - Quick Sort -------------------------------------\n");
+
+            break;
+        case 6:
+            printf("Saindo do programa. --------------------------------\n");
+
+            break;
+
+        default: // qualquer outro valor que não seja 1, 2, 3, 4, 5 ou 6 aparecerá a mensagem de opção inválida.
+            printf("Opcao invalida. Escolha de 1 a 6.\n");
+            break;
         }
-    } while (opcao != 4);
-    return 0
+
+        for (int i = 0; i < quantidade; i++)
+        {
+            printf("Numero %d: %d\n", i + 1, numeros_ordenados[i]);
+        }
+
+    } while (tipo_ordenacao != 6);
+    printf("fim do código.\n");
 }
